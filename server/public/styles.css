@@ -1,0 +1,66 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #191919;
+    margin: 0;
+    padding: 0;
+  }
+  
+  h1 {
+    text-align: center;
+    color: #FFFFFF;
+    margin-top: 50px;
+    font-size: 36px;
+  }
+  
+  form {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  input[type="number"],
+  button {
+    font-size: 18px;
+    padding: 12px 24px;
+    margin: 10px;
+    border: none;
+    border-radius: 30px;
+    background-color: #4CAF50;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  input[type="number"] {
+    padding: 12px 20px;
+  }
+  
+  input[type="number"]:focus,
+  button:focus {
+    outline: none;
+  }
+  
+  input[type="number"]::placeholder {
+    color: #ccc;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  section {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  section[data-testid="recentResult"] {
+    font-size: 24px;
+    color: #FFFFFF;
+  }
+  
+  section[data-testid="resultHistory"] {
+    font-size: 18px;
+    max-width: 400px;
+    margin: 0 auto;
+    color: #FFFFFF;
+  }
+  

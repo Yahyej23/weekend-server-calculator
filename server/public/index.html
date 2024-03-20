@@ -5,20 +5,22 @@
     <title>Server-Side Calculator</title>    
     <script defer src="scripts/axios.js"></script>
     <script defer src="scripts/client.js" charset="utf-8"></script>
+    <link href="styles.css" rel="stylesheet">
   </head>
   <body>
     <h1>Server-Side Calculator</h1>
 
     <form data-testid="calculator">
-      <input placeholder="First Number">
-      <button>+</button>
-      <button>-</button>
-      <button>*</button>
-      <button>/</button>
-      <input placeholder="Second Number">
-      <button>=</button>
-      <button>C</button>
+      <input type="number" placeholder="First Number">
+      <button data-operator="+">+</button>
+      <button data-operator="-">-</button>
+      <button data-operator="*">*</button>
+      <button data-operator="/">/</button>
+      <input type="number" placeholder="Second Number">
+      <button type="submit">=</button>
+      <button type="button" id="clearButton">C</button>
     </form>
+    
 
     <section data-testid="recentResult">
       <!-- The most recent calculation result goes here. -->

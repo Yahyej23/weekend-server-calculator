@@ -1,57 +1,103 @@
 console.log("client.js is sourced!");
-
+// Wait for the DOM content to be fully loaded
 document.addEventListener("DOMContentLoaded", () => {
-  const calculatorForm = document.querySelector('[data-testid="calculator"]');
-  const recentResultSection = document.querySelector(
-    '[data-testid="recentResult"]'
-  );
-  const resultHistorySection = document.querySelector(
-    '[data-testid="resultHistory"]'
-  );
+  // Function to fetch calculation history from the server
+  const fetchCalculationHistory = () => {
+    // Use Axios to make a GET request to '/calculations' endpoint
+    axios
+      .get("/calculations")
+      .then((response) => {
+        // Process the response data and update the calculation history UI
+        updateCalculationHistory(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching calculation history:", error);
+      });
+  };
 
-  calculatorForm.addEventListener("submit", (event) => {
+  // Function to update the calculation history UI
+  const updateCalculationHistory = (calculations) => {
+    // Get the resultHistory section element
+    const resultHistorySection = document.querySelector(
+      '[data-testid="resultHistory"]'
+    );
+    // Clear previous content
+    resultHistorySection.innerHTML = "";
+
+    // Loop through the calculations array and create list items for each calculation
+    calculations.forEach((calculation) => {
+      // Create a list item
+      const listItem = document.createElement("li");
+      listItem.textContent = `${calculation.numOne} ${calculation.operator} ${calculation.numTwo} = ${calculation.result}`;
+      // Append the list item to the resultHistory section
+      resultHistorySection.appendChild(listItem);
+    });
+  };
+
+  // Function to display the most recent calculation result
+  const displayRecentResult = (result) => {
+    // Get the recentResult section element
+    const recentResultSection = document.querySelector(
+      '[data-testid="recentResult"]'
+    );
+    // Update the content
+    recentResultSection.textContent = `Answer: ${result}`;
+  };
+
+  // Function to handle form submission
+  const handleFormSubmit = (event) => {
+    // Prevent the default form submission behavior
     event.preventDefault();
-    handleCalculation();
-  });
+
+    // Get the form element
+    const form = event.target;
+    // Extract input values
+    const numOne = parseFloat(form.elements[0].value);
+    const numTwo = parseFloat(form.elements[5].value);
+    const operator = form.elements[1].textContent; // Assuming the operator button is the second button
+
+    // Create data object to send to the server
+    const data = {
+      numOne,
+      numTwo,
+      operator,
+    };
+
+    // Use Axios to make a POST request to '/calculations' endpoint
+    axios
+      .post("/calculations", data)
+      .then((response) => {
+        // Update the calculation history and the recent result UI
+        fetchCalculationHistory();
+        displayRecentResult(response.data.result);
+      })
+      .catch((error) => {
+        console.error("Error making calculation:", error);
+      });
+  };
+
+  // Function to handle "C" button click to clear input fields
+  const handleClearButtonClick = () => {
+    // Get the input elements
+    const inputFields = document.querySelectorAll(
+      '[data-testid="calculator"] input'
+    );
+    // Reset the value of each input field to an empty string
+    inputFields.forEach((input) => {
+      input.value = "";
+    });
+  };
+
+  // Add event listener to the form for form submission
+  const calculatorForm = document.querySelector('[data-testid="calculator"]');
+  calculatorForm.addEventListener("submit", handleFormSubmit);
+
+  // Add event listener to the "C" button to clear input fields
+  const clearButton = document.querySelector(
+    '[data-testid="calculator"] button:last-of-type'
+  );
+  clearButton.addEventListener("click", handleClearButtonClick);
+
+  // Fetch calculation history from the server when the page loads
+  fetchCalculationHistory();
 });
-
-function handleCalculation() {
-  // Get input values from the form
-  const numOneInput = document.querySelector('[placeholder="First Number"]');
-  const numTwoInput = document.querySelector('[placeholder="Second Number"]');
-  const operatorInput = document.querySelector(".operator:checked");
-
-  // Check if inputs are found
-  if (!numOneInput || !numTwoInput || !operatorInput) {
-    console.error("Input elements not found");
-    return;
-  }
-
-  // Get input values
-  const numOne = parseFloat(numOneInput.value);
-  const numTwo = parseFloat(numTwoInput.value);
-  const operator = operatorInput.value;
-
-  // Check if input values are valid numbers
-  if (isNaN(numOne) || isNaN(numTwo)) {
-    console.error("Invalid input values");
-    return;
-  }
-
-  // Send calculation data to the server
-  const calculationData = { numOne, numTwo, operator };
-  sendCalculation(calculationData);
-}
-
-// Function to send calculation data to the server
-function sendCalculation(calculationData) {
-  // Send calculation data to server using Axios or Fetch
-  // Example:
-  // axios.post('/calculations', calculationData)
-  //   .then(response => {
-  //     // Handle success
-  //   })
-  //   .catch(error => {
-  //     // Handle error
-  //   });
-}

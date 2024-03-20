@@ -60,7 +60,7 @@ app.post("/calculations", (req, res) => {
   calculations.push(newCalculation);
 
   // Send status 201 (Created) back to the client
-  res.status(201).json({ message: "Calculation created successfully" });
+  res.status(201).json(newCalculation);
 });
 
 // PLEASE DO NOT MODIFY ANY CODE BELOW THESE BEARS:
